@@ -63,6 +63,72 @@ function SkillDots({ value, onChange }) {
   );
 }
 
+const calendarOptions = [
+  { label: 'Every 3 months', months: 3, rule: 'RRULE:FREQ=MONTHLY;INTERVAL=3' },
+  { label: 'Every 6 months', months: 6, rule: 'RRULE:FREQ=MONTHLY;INTERVAL=6' },
+  { label: 'Every year',     months: 12, rule: 'RRULE:FREQ=YEARLY;INTERVAL=1' },
+];
+
+function addToCalendar(rule) {
+  const start = new Date();
+  start.setDate(start.getDate() + 1);
+  start.setHours(9, 0, 0, 0);
+  const end = new Date(start);
+  end.setHours(10, 0, 0, 0);
+
+  const fmt = d => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+  const title = 'Time to Get Your Positioning Positioned!';
+  const description = [
+    "Time to revisit your generalist positioning!",
+    "",
+    "The Generalist World Positioning Guidebook helps you identify your strengths, discover your archetype, craft your narrative, and build a personal portfolio that shows the world who you really are.",
+    "",
+    "This recurring reminder keeps your story sharp — because the best generalists never stop owning their narrative.",
+    "",
+    "Open your guidebook: https://guadalu-pe.github.io/gw-positioning/",
+    "",
+    "Estimated time: 2–4 hours for a full refresh, or 30 min for a quick tune-up.",
+  ].join('\n');
+
+  const url = new URL('https://calendar.google.com/calendar/render');
+  url.searchParams.set('action', 'TEMPLATE');
+  url.searchParams.set('text', title);
+  url.searchParams.set('dates', `${fmt(start)}/${fmt(end)}`);
+  url.searchParams.set('recur', rule);
+  url.searchParams.set('details', description);
+  url.searchParams.set('sf', 'true');
+  url.searchParams.set('output', 'xml');
+
+  window.open(url.toString(), '_blank');
+}
+
+function CalendarPrompt() {
+  return (
+    <div className="calendar-prompt">
+      <div className="calendar-prompt-header">
+        <Icon name="event_repeat" size="20px" style={{ color: 'var(--gw-purple)' }} />
+        <div>
+          <div className="calendar-prompt-title">Make it a habit</div>
+          <div className="calendar-prompt-sub">Add a recurring reminder to revisit your positioning</div>
+        </div>
+      </div>
+      <div className="calendar-prompt-btns">
+        {calendarOptions.map(opt => (
+          <button
+            key={opt.months}
+            className="calendar-btn"
+            onClick={() => addToCalendar(opt.rule)}
+          >
+            <Icon name="add" size="15px" />
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const typeStyleMap = {
   Energiser: { className: 'energiser', color: '#059669' },
   Asset:     { className: 'asset',     color: '#d97706' },
@@ -116,6 +182,8 @@ export default function Stage1({ data, onUpdate, onComplete, isCompleted }) {
           <span>It's helpful to do these exercises once, but even more fruitful to do it repeatedly — once a quarter or twice a year.</span>
         </div>
       </div>
+
+      <CalendarPrompt />
 
       <div className="outcomes-box">
         <h4>By the end of this stage, you'll have:</h4>

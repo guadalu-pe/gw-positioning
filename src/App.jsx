@@ -47,13 +47,24 @@ export default function App() {
 
   const completed = userData.completed || [];
 
+  const stageOrder = ['stage1', 'stage2', 'stage3', 'stage4', 'stage5', 'stage6'];
+
   function markComplete(stageId) {
-    if (completed.includes(stageId)) return;
-    const next = [...completed, stageId];
-    const nextData = { ...userData, completed: next };
-    setUserData(nextData);
-    if (user) setDoc(doc(db, 'users', user.uid), nextData, { merge: true });
-    showToast('Stage complete!');
+    if (!completed.includes(stageId)) {
+      const next = [...completed, stageId];
+      const nextData = { ...userData, completed: next };
+      setUserData(nextData);
+      if (user) setDoc(doc(db, 'users', user.uid), nextData, { merge: true });
+    }
+    const idx = stageOrder.indexOf(stageId);
+    const nextStage = stageOrder[idx + 1];
+    if (nextStage) {
+      setCurrent(nextStage);
+      showToast('Stage complete! On to the next one.');
+    } else {
+      setCurrent('stage5');
+      showToast('All stages complete!');
+    }
   }
 
   function showToast(msg) {

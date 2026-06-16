@@ -496,11 +496,18 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
 /* ── Skills table ─────────────────────────────────────── */
 .skills-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 13px;
   margin-bottom: 24px;
   font-family: var(--font-body);
 }
+
+.skills-table th:nth-child(1) { width: 28%; }
+.skills-table th:nth-child(2) { width: 22%; }
+.skills-table th:nth-child(3) { width: 18%; }
+.skills-table th:nth-child(4) { width: 18%; }
+.skills-table th:nth-child(5) { width: 14%; }
 
 .skills-table th {
   text-align: left;

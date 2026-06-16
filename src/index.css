@@ -534,6 +534,33 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
   cursor: pointer;
 }
 
+.skill-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.skill-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--gw-purple);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.12s, transform 0.1s;
+}
+
+.skill-dot:hover {
+  transform: scale(1.2);
+  background: var(--gw-lavender);
+}
+
+.skill-dot.filled {
+  background: var(--gw-purple);
+}
+
 .type-badge { font-size: 12px; font-weight: 600; }
 .type-badge.energiser { color: #059669; }
 .type-badge.asset { color: #d97706; }

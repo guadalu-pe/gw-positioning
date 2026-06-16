@@ -20,6 +20,28 @@ const reflections = [
   },
 ];
 
+const levels = ['', 'Low', 'Medium', 'High'];
+
+function SkillDots({ value, onChange }) {
+  const filled = levels.indexOf(value);
+  function handleClick(i) {
+    const next = filled === i ? '' : levels[i];
+    onChange(next);
+  }
+  return (
+    <div className="skill-dots" title={value || 'Click to set skill level'}>
+      {[1, 2, 3].map(i => (
+        <button
+          key={i}
+          className={`skill-dot ${filled >= i ? 'filled' : ''}`}
+          onClick={() => handleClick(i)}
+          aria-label={levels[i]}
+        />
+      ))}
+    </div>
+  );
+}
+
 const typeStyleMap = {
   Energiser: { className: 'energiser', color: '#059669' },
   Asset:     { className: 'asset',     color: '#d97706' },
@@ -182,12 +204,10 @@ export default function Stage1({ data, onUpdate, onComplete, isCompleted }) {
                     </select>
                   </td>
                   <td>
-                    <select value={sd.skillLevel || ''} onChange={e => updateSkill(skill.name, 'skillLevel', e.target.value)}>
-                      <option value="">—</option>
-                      <option>High</option>
-                      <option>Medium</option>
-                      <option>Low</option>
-                    </select>
+                    <SkillDots
+                      value={sd.skillLevel || ''}
+                      onChange={val => updateSkill(skill.name, 'skillLevel', val)}
+                    />
                   </td>
                   <td>
                     {type ? (

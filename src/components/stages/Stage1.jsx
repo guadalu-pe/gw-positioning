@@ -20,22 +20,19 @@ const reflections = [
   },
 ];
 
-const levels = ['', 'Low', 'Medium', 'High'];
-
 function SkillDots({ value, onChange }) {
-  const filled = levels.indexOf(value);
+  const filled = typeof value === 'number' ? value : 0;
   function handleClick(i) {
-    const next = filled === i ? '' : levels[i];
-    onChange(next);
+    onChange(filled === i ? 0 : i);
   }
   return (
-    <div className="skill-dots" title={value || 'Click to set skill level'}>
-      {[1, 2, 3].map(i => (
+    <div className="skill-dots" title={filled ? `Level ${filled}/5` : 'Click to set skill level'}>
+      {[1, 2, 3, 4, 5].map(i => (
         <button
           key={i}
           className={`skill-dot ${filled >= i ? 'filled' : ''}`}
           onClick={() => handleClick(i)}
-          aria-label={levels[i]}
+          aria-label={`Level ${i}`}
         />
       ))}
     </div>

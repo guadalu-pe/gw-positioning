@@ -42,7 +42,7 @@ export function computeSkillType(wantToDo, skillLevel) {
   if (!wantToDo || !skillLevel) return '';
   const wantMore = wantToDo === 'More';
   const wantLess = wantToDo === 'Less';
-  const isMedHigh = skillLevel === 'High' || skillLevel === 'Medium';
+  const isMedHigh = typeof skillLevel === 'number' ? skillLevel >= 3 : (skillLevel === 'High' || skillLevel === 'Medium');
 
   if (wantMore && isMedHigh) return 'Energiser';
   if (!wantMore && isMedHigh) return 'Asset';

@@ -1,4 +1,7 @@
 import Icon from '../Icon';
+import StepBreadcrumb, { StepNav } from '../StepBreadcrumb';
+
+const STEPS = ['Your Summary'];
 
 export default function Stage5({ allData, onComplete, isCompleted, onNavigate }) {
   const s1 = allData.stage1 || {};
@@ -96,6 +99,8 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
         </div>
       </div>
 
+      <StepBreadcrumb steps={STEPS} current={0} onNavigate={() => {}} />
+
       <div className="stage-intro">
         Welcome to the fun part! This is where everything comes together. Review everything you've built across all stages — this is your complete positioning snapshot.
       </div>
@@ -169,15 +174,7 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
         </div>
       )}
 
-      <div className="stage-complete-row">
-        <button className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`} onClick={onComplete}>
-          {isCompleted ? (
-            <><Icon name="check_circle" size="17px" /> Stage Complete</>
-          ) : (
-            <>Mark Stage Complete <Icon name="arrow_forward" size="17px" /></>
-          )}
-        </button>
-      </div>
+      <StepNav current={0} total={1} onBack={() => {}} onNext={() => {}} onComplete={onComplete} isCompleted={isCompleted} />
     </div>
   );
 }

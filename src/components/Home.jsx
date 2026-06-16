@@ -20,7 +20,7 @@ export default function Home({ onNavigate, completed }) {
           the toughest challenge: embracing who you are and owning your narrative. Grab a cuppa and let's get started. 🙌🏽
         </p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button className="btn btn-primary" onClick={() => onNavigate('stage1')}>
+          <button className="btn btn-accent" onClick={() => onNavigate('stage1')}>
             Start Stage 1 →
           </button>
           <a

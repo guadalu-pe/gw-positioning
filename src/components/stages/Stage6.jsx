@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Icon from '../Icon';
 
 const standardQuestions = [
   { key: 'q1', text: 'Tell me about yourself / Walk me through your career' },
@@ -89,11 +90,16 @@ export default function Stage6({ data, onUpdate, onComplete, isCompleted }) {
   return (
     <div className="stage-container">
       <div className="stage-header">
-        <div className="stage-badge">🖇️ Stage 6</div>
+        <div className="stage-badge">
+          <Icon name="record_voice_over" size="13px" />
+          Stage 6
+        </div>
         <h1 className="stage-title">Nailing Your Narrative When It Matters</h1>
         <div className="stage-meta">
-          <span className="stage-time">⏰ Est. 2–3 hrs per interview</span>
-          <span style={{ fontSize: '13px', color: 'var(--gray-400)' }}>🟣 🟣 🟣 🟣 🟣 🟣</span>
+          <span className="stage-time">
+            <Icon name="schedule" size="15px" />
+            Est. 2–3 hrs per interview
+          </span>
         </div>
       </div>
 
@@ -110,21 +116,20 @@ export default function Stage6({ data, onUpdate, onComplete, isCompleted }) {
         </ul>
       </div>
 
-      {/* Step 1 */}
       <div className="section-header">
         <span className="step-badge">Step 1</span>
         <h2>Prep Your Interview Answers</h2>
       </div>
 
       <div className="callout info">
-        <span className="callout-icon">💡</span>
+        <Icon name="info" className="callout-icon" />
         <div className="callout-content">
           <p>Interviewing as a generalist is <em>different</em>. You have to tell stories that are often quite complex to demonstrate your value. The key is in preparation. Use the questions below to start writing initial answers, and add more as you encounter them in real interviews.</p>
         </div>
       </div>
 
       <div className="callout action">
-        <span className="callout-icon">🪄</span>
+        <Icon name="auto_fix_high" className="callout-icon" />
         <div className="callout-content">
           <h4>Action</h4>
           <p>Write out initial answers to the questions below. As you do more interviews, add the generalist-specific questions you encounter to build your answer bank.</p>
@@ -143,14 +148,13 @@ export default function Stage6({ data, onUpdate, onComplete, isCompleted }) {
         </div>
       ))}
 
-      {/* Step 2: STARL */}
       <div className="section-header">
         <span className="step-badge">Step 2</span>
         <h2>The STARL Method: Your Story Bank</h2>
       </div>
 
       <div className="callout action">
-        <span className="callout-icon">🪄</span>
+        <Icon name="auto_fix_high" className="callout-icon" />
         <div className="callout-content">
           <h4>Action</h4>
           <p>For every interview, think of your best professional stories to illuminate your generalist experiences. Plan your answers (but don't over-rehearse!). Build a bank of stories you can reuse whenever a new opportunity arises.</p>
@@ -158,7 +162,7 @@ export default function Stage6({ data, onUpdate, onComplete, isCompleted }) {
       </div>
 
       <div className="callout tip">
-        <span className="callout-icon">💡</span>
+        <Icon name="tips_and_updates" className="callout-icon" />
         <div className="callout-content">
           <h4>The STARL Framework</h4>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
@@ -187,15 +191,16 @@ export default function Stage6({ data, onUpdate, onComplete, isCompleted }) {
       ))}
 
       <button className="btn btn-secondary" onClick={addStory} style={{ marginBottom: '24px' }}>
-        + Add Another Story
+        <Icon name="add" size="16px" /> Add Another Story
       </button>
 
       <div className="stage-complete-row">
-        <button
-          className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`}
-          onClick={onComplete}
-        >
-          {isCompleted ? '✓ Stage Complete!' : 'Mark Stage Complete →'}
+        <button className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`} onClick={onComplete}>
+          {isCompleted ? (
+            <><Icon name="check_circle" size="17px" /> Stage Complete</>
+          ) : (
+            <>Mark Stage Complete <Icon name="arrow_forward" size="17px" /></>
+          )}
         </button>
       </div>
     </div>

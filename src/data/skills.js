@@ -42,12 +42,18 @@ export function computeSkillType(wantToDo, skillLevel) {
   if (!wantToDo || !skillLevel) return '';
   const wantMore = wantToDo === 'More';
   const wantLess = wantToDo === 'Less';
-  const isHigh = skillLevel === 'High';
   const isMedHigh = skillLevel === 'High' || skillLevel === 'Medium';
 
-  if (wantMore && isMedHigh) return 'Energiser 🚀';
-  if (!wantMore && isMedHigh) return 'Asset ⚖️';
-  if (wantMore && !isMedHigh) return 'Potential ⚡';
-  if (wantLess && !isMedHigh) return 'Drainer ❌';
-  return 'Potential ⚡';
+  if (wantMore && isMedHigh) return 'Energiser';
+  if (!wantMore && isMedHigh) return 'Asset';
+  if (wantMore && !isMedHigh) return 'Potential';
+  if (wantLess && !isMedHigh) return 'Drainer';
+  return 'Potential';
 }
+
+export const skillTypeIcon = {
+  Energiser: 'rocket_launch',
+  Asset:     'balance',
+  Drainer:   'do_not_disturb',
+  Potential: 'bolt',
+};

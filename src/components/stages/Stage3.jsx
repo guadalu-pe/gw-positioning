@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Icon from '../Icon';
 
 const frameworkItems = [
   {
@@ -137,11 +138,16 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
   return (
     <div className="stage-container">
       <div className="stage-header">
-        <div className="stage-badge">💌 Stage 3</div>
+        <div className="stage-badge">
+          <Icon name="edit_note" size="13px" />
+          Stage 3
+        </div>
         <h1 className="stage-title">Crafting Your Generalist Narrative</h1>
         <div className="stage-meta">
-          <span className="stage-time">⏰ Est. 2–4 hours</span>
-          <span style={{ fontSize: '13px', color: 'var(--gray-400)' }}>🟣 🟣 🟣 ⚪ ⚪ ⚪</span>
+          <span className="stage-time">
+            <Icon name="schedule" size="15px" />
+            Est. 2–4 hours
+          </span>
         </div>
       </div>
 
@@ -158,14 +164,13 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
         </ul>
       </div>
 
-      {/* Step 1 */}
       <div className="section-header">
         <span className="step-badge">Step 1</span>
         <h2>Name, Same, Fame, Aim, Game</h2>
       </div>
 
       <div className="callout action">
-        <span className="callout-icon">🪄</span>
+        <Icon name="auto_fix_high" className="callout-icon" />
         <div className="callout-content">
           <h4>Action</h4>
           <p>Work through the framework below to create your high-level narrative. Fill in each section — your answers will be used to generate your AI tagline.</p>
@@ -193,14 +198,13 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
         </div>
       ))}
 
-      {/* Step 2 */}
       <div className="section-header">
         <span className="step-badge">Step 2</span>
         <h2>Craft Your One-Liner</h2>
       </div>
 
       <div className="callout tip">
-        <span className="callout-icon">⚡</span>
+        <Icon name="bolt" className="callout-icon" />
         <div className="callout-content">
           <p>A great one-liner is like the hook of a story. It grabs attention, piques curiosity, and makes people want to know more. Use the formula: <strong>"I help [target audience] achieve [specific outcomes] by [unique approach]."</strong></p>
         </div>
@@ -237,7 +241,6 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
         />
       </div>
 
-      {/* Step 3: AI Tagline */}
       <div className="section-header">
         <span className="step-badge">Step 3</span>
         <h2>Generate Your AI Tagline</h2>
@@ -245,7 +248,7 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
 
       <div className="ai-box">
         <div className="ai-box-header">
-          <span style={{ fontSize: '24px' }}>✨</span>
+          <Icon name="auto_awesome" size="28px" style={{ color: 'var(--gw-purple)', flexShrink: 0 }} />
           <div>
             <div className="ai-box-title">AI-Powered Tagline Generator</div>
             <div className="ai-box-subtitle">Uses your framework answers to craft a personalised tagline and bio</div>
@@ -253,7 +256,7 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
         </div>
 
         <div className="callout info" style={{ marginBottom: '16px' }}>
-          <span className="callout-icon">ℹ️</span>
+          <Icon name="info" className="callout-icon" />
           <div className="callout-content">
             <p>Option A: Enter your Anthropic API key below for instant generation. Your key is only used in your browser and never stored on any server.</p>
             <p style={{ marginTop: '4px' }}>Option B: Copy the prompt and paste it into <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--purple-600)' }}>claude.ai</a> or any AI tool.</p>
@@ -281,14 +284,16 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
             onClick={handleGenerate}
             disabled={!apiKey || loading}
           >
-            {loading ? '✨ Generating...' : '✨ Generate with AI'}
+            <Icon name={loading ? 'hourglass_empty' : 'auto_awesome'} size="16px" />
+            {loading ? 'Generating...' : 'Generate with AI'}
           </button>
           <button className="btn btn-secondary" onClick={() => setShowCopyPrompt(v => !v)}>
-            {showCopyPrompt ? 'Hide Prompt' : '📋 View / Copy Prompt'}
+            <Icon name="content_copy" size="16px" />
+            {showCopyPrompt ? 'Hide Prompt' : 'View / Copy Prompt'}
           </button>
           {showCopyPrompt && (
             <button className="btn btn-secondary btn-sm" onClick={copyPrompt}>
-              {copied ? '✓ Copied!' : 'Copy to Clipboard'}
+              {copied ? 'Copied!' : 'Copy to Clipboard'}
             </button>
           )}
         </div>
@@ -300,14 +305,15 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
         )}
 
         {error && (
-          <div style={{ marginTop: '12px', padding: '10px 14px', background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px', color: '#7f1d1d', fontSize: '13px' }}>
-            ⚠️ {error}
+          <div style={{ marginTop: '12px', padding: '10px 14px', background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px', color: '#7f1d1d', fontSize: '13px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+            <Icon name="warning" size="16px" style={{ flexShrink: 0, marginTop: '1px' }} />
+            {error}
           </div>
         )}
 
         {aiResult && (
           <div className="ai-result">
-            <div className="ai-result-label">AI-Generated Tagline & Bio</div>
+            <div className="ai-result-label">AI-Generated Tagline &amp; Bio</div>
             <div style={{ whiteSpace: 'pre-wrap', fontSize: '14px', lineHeight: '1.7', color: 'var(--gray-800)' }}>
               {aiResult}
             </div>
@@ -316,7 +322,7 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
                 className="btn btn-secondary btn-sm"
                 onClick={() => { navigator.clipboard.writeText(aiResult); }}
               >
-                📋 Copy Result
+                <Icon name="content_copy" size="14px" /> Copy Result
               </button>
               <button
                 className="btn btn-ghost btn-sm"
@@ -330,11 +336,12 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
       </div>
 
       <div className="stage-complete-row">
-        <button
-          className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`}
-          onClick={onComplete}
-        >
-          {isCompleted ? '✓ Stage Complete!' : 'Mark Stage Complete →'}
+        <button className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`} onClick={onComplete}>
+          {isCompleted ? (
+            <><Icon name="check_circle" size="17px" /> Stage Complete</>
+          ) : (
+            <>Mark Stage Complete <Icon name="arrow_forward" size="17px" /></>
+          )}
         </button>
       </div>
     </div>

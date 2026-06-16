@@ -1,12 +1,14 @@
+import Icon from './Icon';
+
 const navItems = [
-  { id: 'home', emoji: '🏠', title: 'Home', stage: null },
-  { id: 'stage1', emoji: '⛳', title: 'Strengths & Superpowers', stage: 'Stage 1' },
-  { id: 'stage2', emoji: '🌱', title: 'Your Generalist Archetype', stage: 'Stage 2' },
-  { id: 'stage3', emoji: '💌', title: 'Craft Your Narrative', stage: 'Stage 3' },
-  { id: 'stage4', emoji: '🎨', title: 'Build Your Portfolio', stage: 'Stage 4' },
-  { id: 'stage5', emoji: '🎬', title: 'Putting It All Together', stage: 'Stage 5' },
-  { id: 'stage6', emoji: '🖇️', title: 'Nail Your Narrative', stage: 'Stage 6' },
-  { id: 'gallery', emoji: '🗃️', title: 'Profile Gallery', stage: null },
+  { id: 'home',   icon: 'home',               title: 'Home',                     stage: null },
+  { id: 'stage1', icon: 'bolt',               title: 'Strengths & Superpowers',  stage: 'Stage 1' },
+  { id: 'stage2', icon: 'psychology',         title: 'Your Generalist Archetype', stage: 'Stage 2' },
+  { id: 'stage3', icon: 'edit_note',          title: 'Craft Your Narrative',     stage: 'Stage 3' },
+  { id: 'stage4', icon: 'palette',            title: 'Build Your Portfolio',     stage: 'Stage 4' },
+  { id: 'stage5', icon: 'view_list',          title: 'Putting It All Together',  stage: 'Stage 5' },
+  { id: 'stage6', icon: 'record_voice_over',  title: 'Nail Your Narrative',      stage: 'Stage 6' },
+  { id: 'gallery',icon: 'grid_view',          title: 'Profile Gallery',          stage: null },
 ];
 
 export default function Sidebar({ current, onNavigate, completed }) {
@@ -30,28 +32,22 @@ export default function Sidebar({ current, onNavigate, completed }) {
       </div>
 
       <nav className="sidebar-nav">
-        {navItems.map((item, i) => {
-          const isStage = !!item.stage;
-          const isDone = completed.includes(item.id);
-          const showLabel = i === 0 || (i === 1) || (i === navItems.length - 1);
-
-          return (
-            <button
-              key={item.id}
-              className={`nav-item ${current === item.id ? 'active' : ''}`}
-              onClick={() => onNavigate(item.id)}
-            >
-              <span className="nav-item-emoji">{item.emoji}</span>
-              <span className="nav-item-text">
-                {item.stage && (
-                  <span className="nav-item-stage">{item.stage}</span>
-                )}
-                <span className="nav-item-title" style={{ display: 'block' }}>{item.title}</span>
-              </span>
-              {isDone && <span className="nav-item-check">✓</span>}
-            </button>
-          );
-        })}
+        {navItems.map(item => (
+          <button
+            key={item.id}
+            className={`nav-item ${current === item.id ? 'active' : ''}`}
+            onClick={() => onNavigate(item.id)}
+          >
+            <Icon name={item.icon} className="nav-item-icon" />
+            <span className="nav-item-text">
+              {item.stage && <span className="nav-item-stage">{item.stage}</span>}
+              <span className="nav-item-title">{item.title}</span>
+            </span>
+            {completed.includes(item.id) && (
+              <Icon name="check_circle" className="nav-item-check" />
+            )}
+          </button>
+        ))}
       </nav>
     </aside>
   );

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Icon from '../Icon';
 
 const sections = [
   {
@@ -78,11 +79,16 @@ export default function Stage4({ data, onUpdate, onComplete, isCompleted }) {
   return (
     <div className="stage-container">
       <div className="stage-header">
-        <div className="stage-badge">🎨 Stage 4</div>
+        <div className="stage-badge">
+          <Icon name="palette" size="13px" />
+          Stage 4
+        </div>
         <h1 className="stage-title">Creating Your Generalist Portfolio</h1>
         <div className="stage-meta">
-          <span className="stage-time">⏰ Est. 1–2 hours</span>
-          <span style={{ fontSize: '13px', color: 'var(--gray-400)' }}>🟣 🟣 🟣 🟣 ⚪ ⚪</span>
+          <span className="stage-time">
+            <Icon name="schedule" size="15px" />
+            Est. 1–2 hours
+          </span>
         </div>
       </div>
 
@@ -98,7 +104,7 @@ export default function Stage4({ data, onUpdate, onComplete, isCompleted }) {
       </div>
 
       <div className="callout action" style={{ marginBottom: '24px' }}>
-        <span className="callout-icon">🪄</span>
+        <Icon name="auto_fix_high" className="callout-icon" />
         <div className="callout-content">
           <h4>Action</h4>
           <p>Draft your portfolio content below, then transfer it to your website tool of choice. Work through each section and replace the template content with your own.</p>
@@ -114,7 +120,7 @@ export default function Stage4({ data, onUpdate, onComplete, isCompleted }) {
             <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--gray-900)' }}>Section {section.num}: {section.title}</h3>
           </div>
           <div className="callout tip" style={{ marginBottom: '16px' }}>
-            <span className="callout-icon">💜</span>
+            <Icon name="tips_and_updates" className="callout-icon" />
             <div className="callout-content">
               <p>{section.tip}</p>
             </div>
@@ -132,7 +138,6 @@ export default function Stage4({ data, onUpdate, onComplete, isCompleted }) {
         </div>
       ))}
 
-      {/* Tools */}
       <div className="section-header" style={{ marginTop: '32px' }}>
         <span className="step-badge">Tools</span>
         <h2>Recommended Portfolio Tools</h2>
@@ -149,15 +154,15 @@ export default function Stage4({ data, onUpdate, onComplete, isCompleted }) {
             onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--purple-300)'; e.currentTarget.style.background = 'var(--purple-50)'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--gray-200)'; e.currentTarget.style.background = 'white'; }}
           >
-            <span style={{ fontSize: '18px', fontWeight: '700', color: 'var(--purple-700)', minWidth: '90px' }}>💜 {t.name}</span>
+            <span style={{ fontSize: '15px', fontWeight: '700', color: 'var(--purple-700)', minWidth: '90px' }}>{t.name}</span>
             <span style={{ fontSize: '13px', color: 'var(--gray-500)' }}>{t.desc}</span>
-            <span style={{ marginLeft: 'auto', color: 'var(--purple-500)', fontSize: '14px' }}>↗</span>
+            <Icon name="open_in_new" size="16px" style={{ marginLeft: 'auto', color: 'var(--purple-500)', flexShrink: 0 }} />
           </a>
         ))}
       </div>
 
       <div className="callout tip">
-        <span className="callout-icon">🪄</span>
+        <Icon name="auto_fix_high" className="callout-icon" />
         <div className="callout-content">
           <h4>Next step</h4>
           <p>Once you're happy with your draft content above, transfer it into your chosen tool and publish. Then share it in the <strong>#heckyeah</strong> channel in the Generalist World community to get feedback!</p>
@@ -165,11 +170,12 @@ export default function Stage4({ data, onUpdate, onComplete, isCompleted }) {
       </div>
 
       <div className="stage-complete-row">
-        <button
-          className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`}
-          onClick={onComplete}
-        >
-          {isCompleted ? '✓ Stage Complete!' : 'Mark Stage Complete →'}
+        <button className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`} onClick={onComplete}>
+          {isCompleted ? (
+            <><Icon name="check_circle" size="17px" /> Stage Complete</>
+          ) : (
+            <>Mark Stage Complete <Icon name="arrow_forward" size="17px" /></>
+          )}
         </button>
       </div>
     </div>

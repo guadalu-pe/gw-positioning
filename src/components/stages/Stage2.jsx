@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { quizQuestions, archetypes, computeArchetype } from '../../data/quiz';
+import Icon from '../Icon';
 
 export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
   const [answers, setAnswers] = useState(data.quizAnswers || {});
@@ -41,11 +42,16 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
   return (
     <div className="stage-container">
       <div className="stage-header">
-        <div className="stage-badge">🌱 Stage 2</div>
+        <div className="stage-badge">
+          <Icon name="psychology" size="13px" />
+          Stage 2
+        </div>
         <h1 className="stage-title">Discovering Your Generalist Archetype</h1>
         <div className="stage-meta">
-          <span className="stage-time">⏰ Est. 30–45 minutes</span>
-          <span style={{ fontSize: '13px', color: 'var(--gray-400)' }}>🟣 🟣 ⚪ ⚪ ⚪ ⚪</span>
+          <span className="stage-time">
+            <Icon name="schedule" size="15px" />
+            Est. 30–45 minutes
+          </span>
         </div>
       </div>
 
@@ -61,7 +67,6 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
         </ul>
       </div>
 
-      {/* Step 1: Quiz */}
       <div className="section-header">
         <span className="step-badge">Step 1</span>
         <h2>Take the Archetype Quiz</h2>
@@ -70,7 +75,7 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
       {!submitted && (
         <>
           <div className="callout action" style={{ marginBottom: '20px' }}>
-            <span className="callout-icon">🪄</span>
+            <Icon name="auto_fix_high" className="callout-icon" />
             <div className="callout-content">
               <h4>Action</h4>
               <p>Answer all {total} questions below to discover your generalist archetype. There are no right or wrong answers — go with your gut!</p>
@@ -108,13 +113,16 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
               onClick={submitQuiz}
               style={{ fontSize: '16px', padding: '12px 32px' }}
             >
-              {allAnswered ? 'Reveal My Archetype →' : `Answer all ${total} questions to continue`}
+              {allAnswered ? (
+                <><Icon name="arrow_forward" size="18px" /> Reveal My Archetype</>
+              ) : (
+                `Answer all ${total} questions to continue`
+              )}
             </button>
           </div>
         </>
       )}
 
-      {/* Result */}
       {submitted && result && (() => {
         const colors = archetypeColors[result.key] || archetypeColors.translator;
         return (
@@ -123,10 +131,11 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
               className="archetype-result"
               style={{ background: `linear-gradient(135deg, ${colors.bg}, ${colors.bg}cc)`, border: `1px solid ${colors.border}`, color: colors.text }}
             >
-              <div className="archetype-emoji">{result.emoji}</div>
+              <div className="archetype-emoji">
+                <Icon name={result.icon} size="36px" style={{ color: colors.text }} />
+              </div>
               <div className="archetype-name">{result.name}</div>
               <div className="archetype-tagline">{result.tagline}</div>
-
               <div className="archetype-description">{result.description}</div>
 
               <div className="archetype-strengths">
@@ -158,7 +167,7 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
 
             <div style={{ display: 'flex', gap: '10px', marginBottom: '24px' }}>
               <button className="btn btn-secondary" onClick={retakeQuiz}>
-                ↩ Retake Quiz
+                <Icon name="replay" size="16px" /> Retake Quiz
               </button>
               <a
                 href="https://www.generalistquiz.com/"
@@ -166,14 +175,13 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
                 rel="noopener noreferrer"
                 className="btn btn-secondary"
               >
-                Try the Official GW Quiz ↗
+                Try the Official GW Quiz <Icon name="open_in_new" size="15px" />
               </a>
             </div>
           </>
         );
       })()}
 
-      {/* Step 2: Learn about archetypes */}
       <div className="section-header">
         <span className="step-badge">Step 2</span>
         <h2>The Four Generalist Archetypes</h2>
@@ -188,14 +196,14 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
         return (
           <div key={key} className="card" style={{ borderLeft: `4px solid ${colors.border}` }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-              <span style={{ fontSize: '24px' }}>{arch.emoji}</span>
+              <Icon name={arch.icon} size="26px" style={{ color: colors.text, flexShrink: 0 }} />
               <div>
                 <div className="card-title" style={{ marginBottom: '2px' }}>{arch.name}</div>
                 <div style={{ fontSize: '13px', color: 'var(--gray-500)', fontStyle: 'italic' }}>{arch.tagline}</div>
               </div>
               {result && result.key === arch.key && (
                 <span style={{ marginLeft: 'auto', background: colors.bg, color: colors.text, border: `1px solid ${colors.border}`, padding: '3px 10px', borderRadius: '99px', fontSize: '12px', fontWeight: '600' }}>
-                  ← Your Archetype
+                  Your Archetype
                 </span>
               )}
             </div>
@@ -207,11 +215,12 @@ export default function Stage2({ data, onUpdate, onComplete, isCompleted }) {
       })}
 
       <div className="stage-complete-row">
-        <button
-          className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`}
-          onClick={onComplete}
-        >
-          {isCompleted ? '✓ Stage Complete!' : 'Mark Stage Complete →'}
+        <button className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`} onClick={onComplete}>
+          {isCompleted ? (
+            <><Icon name="check_circle" size="17px" /> Stage Complete</>
+          ) : (
+            <>Mark Stage Complete <Icon name="arrow_forward" size="17px" /></>
+          )}
         </button>
       </div>
     </div>

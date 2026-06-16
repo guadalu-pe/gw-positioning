@@ -1,3 +1,5 @@
+import Icon from '../Icon';
+
 export default function Stage5({ allData, onComplete, isCompleted, onNavigate }) {
   const s1 = allData.stage1 || {};
   const s2 = allData.stage2 || {};
@@ -15,7 +17,7 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
   const summaryItems = [
     {
       label: 'Your Generalist Archetype',
-      value: archetype ? `${archetype.emoji} ${archetype.name}` : null,
+      value: archetype ? archetype.name : null,
       nav: 'stage2',
     },
     {
@@ -81,16 +83,21 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
   return (
     <div className="stage-container">
       <div className="stage-header">
-        <div className="stage-badge">🎬 Stage 5</div>
+        <div className="stage-badge">
+          <Icon name="view_list" size="13px" />
+          Stage 5
+        </div>
         <h1 className="stage-title">Putting It All Together</h1>
         <div className="stage-meta">
-          <span className="stage-time">⏰ Est. 30 minutes</span>
-          <span style={{ fontSize: '13px', color: 'var(--gray-400)' }}>🟣 🟣 🟣 🟣 🟣 ⚪</span>
+          <span className="stage-time">
+            <Icon name="schedule" size="15px" />
+            Est. 30 minutes
+          </span>
         </div>
       </div>
 
       <div className="stage-intro">
-        WELCOME TO THE FUN PART! 🎉 This is where everything comes together. Review everything you've built across all stages — this is your complete positioning snapshot.
+        Welcome to the fun part! This is where everything comes together. Review everything you've built across all stages — this is your complete positioning snapshot.
       </div>
 
       <div className="outcomes-box">
@@ -101,7 +108,6 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
         </ul>
       </div>
 
-      {/* Progress */}
       <div className="card" style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <span style={{ fontWeight: '700', fontSize: '15px' }}>Your Positioning Snapshot</span>
@@ -131,7 +137,7 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
                   onClick={() => onNavigate(item.nav)}
                   style={{ flexShrink: 0 }}
                 >
-                  Fill in →
+                  Fill in <Icon name="arrow_forward" size="14px" />
                 </button>
               </div>
             )}
@@ -141,7 +147,7 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
 
       {archetype && (
         <div className="callout tip" style={{ marginBottom: '24px' }}>
-          <span className="callout-icon">{archetype.emoji}</span>
+          <Icon name={archetype.icon} className="callout-icon" style={{ color: 'var(--gw-purple)' }} />
           <div className="callout-content">
             <h4>Your archetype: {archetype.name}</h4>
             <p>{archetype.tagline}</p>
@@ -158,17 +164,18 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
             style={{ marginTop: '12px' }}
             onClick={() => navigator.clipboard.writeText(s3.oneLiner)}
           >
-            📋 Copy
+            <Icon name="content_copy" size="14px" /> Copy
           </button>
         </div>
       )}
 
       <div className="stage-complete-row">
-        <button
-          className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`}
-          onClick={onComplete}
-        >
-          {isCompleted ? '✓ Stage Complete!' : 'Mark Stage Complete →'}
+        <button className={`btn ${isCompleted ? 'btn-success' : 'btn-primary'}`} onClick={onComplete}>
+          {isCompleted ? (
+            <><Icon name="check_circle" size="17px" /> Stage Complete</>
+          ) : (
+            <>Mark Stage Complete <Icon name="arrow_forward" size="17px" /></>
+          )}
         </button>
       </div>
     </div>

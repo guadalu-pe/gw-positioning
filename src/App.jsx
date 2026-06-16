@@ -45,7 +45,7 @@ export default function App() {
     if (completed.includes(stageId)) return;
     const next = [...completed, stageId];
     setUserData(prev => ({ ...prev, completed: next }));
-    showToast('Stage complete! 🎉');
+    showToast('Stage complete!');
   }
 
   function showToast(msg) {

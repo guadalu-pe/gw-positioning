@@ -86,9 +86,9 @@ export const archetypes = {
   a: {
     key: 'translator',
     name: 'The Translator',
-    emoji: '🌐',
+    icon: 'translate',
     tagline: 'You bridge worlds and make the complex clear.',
-    color: '#7C3AED',
+    color: '#5c0098',
     description: `You are a gifted Translator — a unique type of generalist who excels at bridging gaps between different disciplines and fields of knowledge. Your ability to understand, synthesize, and communicate complex ideas across various domains makes you an invaluable asset in our increasingly specialized world.
 
 As a Translator, you possess a remarkable talent for grasping concepts from diverse fields and making them accessible to others. You effortlessly move between disciplines — whether science and art, technology and humanities, or business and social sciences — facilitating understanding and collaboration between experts who might otherwise struggle to communicate.
@@ -105,7 +105,7 @@ Your strength is rooted in your sense of purpose: the drive to contribute meanin
   b: {
     key: 'connector',
     name: 'The Connector',
-    emoji: '🔗',
+    icon: 'hub',
     tagline: 'You build bridges between people and make collaboration happen.',
     color: '#059669',
     description: `You are a natural Connector — a rare and valuable type of generalist who thrives on building bridges between different industries and people. Your innate ability to forge meaningful relationships across diverse fields sets you apart in our increasingly interconnected world.
@@ -124,9 +124,9 @@ Your strength lies in your deep-seated need for relatedness: the desire to form 
   c: {
     key: 'innovator',
     name: 'The Innovator',
-    emoji: '💡',
+    icon: 'tips_and_updates',
     tagline: 'You challenge the status quo and create the future.',
-    color: '#D97706',
+    color: '#d97706',
     description: `You are a dynamic Innovator — a rare and visionary type of generalist who thrives on creating change and pushing boundaries. Your innate ability to generate novel ideas and drive innovation sets you apart in our rapidly evolving world.
 
 As an Innovator, you possess an extraordinary talent for identifying opportunities for improvement and envisioning new possibilities. You effortlessly navigate complex problems, drawing inspiration from diverse sources to create groundbreaking solutions.
@@ -143,9 +143,9 @@ Your strength lies in your deep-seated need for autonomy: the desire for self-di
   d: {
     key: 'systems-thinker',
     name: 'The Systems Thinker',
-    emoji: '🧩',
+    icon: 'account_tree',
     tagline: 'You see the whole picture and navigate complexity with ease.',
-    color: '#DC2626',
+    color: '#dc2626',
     description: `You are a masterful Systems Thinker — a rare and invaluable type of generalist who excels at understanding and navigating complex systems. Your ability to see the big picture while grasping intricate details sets you apart in our increasingly interconnected world.
 
 As a Systems Thinker, you possess an extraordinary talent for identifying patterns, connections, and interdependencies that others might overlook. You effortlessly navigate through various domains — business processes, ecological systems, social structures — always seeking to understand how elements interact and influence each other.

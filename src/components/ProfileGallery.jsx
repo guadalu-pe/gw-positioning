@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { profiles } from '../data/profiles';
+import Icon from './Icon';
 
 function getInitials(name) {
   return name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
@@ -33,7 +34,10 @@ export default function ProfileGallery() {
   return (
     <div className="stage-container">
       <div className="stage-header">
-        <div className="stage-badge">🗃️ Bonus</div>
+        <div className="stage-badge">
+          <Icon name="star" size="13px" />
+          Bonus
+        </div>
         <h1 className="stage-title">Profile Gallery</h1>
         <div className="stage-meta">
           <span style={{ fontSize: '13px', color: 'var(--gray-500)' }}>{profiles.length} generalist portfolios for inspiration</span>
@@ -45,7 +49,7 @@ export default function ProfileGallery() {
       </div>
 
       <div className="gallery-search">
-        <span className="gallery-search-icon">🔍</span>
+        <Icon name="search" className="gallery-search-icon" />
         <input
           type="text"
           placeholder="Search by name..."
@@ -87,7 +91,9 @@ export default function ProfileGallery() {
       )}
 
       <div style={{ textAlign: 'center', marginTop: '48px', padding: '24px', background: 'var(--purple-50)', borderRadius: '12px' }}>
-        <div style={{ fontSize: '20px', marginBottom: '8px' }}>🌟</div>
+        <div style={{ marginBottom: '8px' }}>
+          <Icon name="star" size="28px" style={{ color: 'var(--gw-purple)' }} />
+        </div>
         <div style={{ fontWeight: '700', color: 'var(--gray-900)', marginBottom: '6px' }}>Share Your Portfolio!</div>
         <p style={{ fontSize: '13px', color: 'var(--gray-500)', lineHeight: '1.6' }}>
           Once you've completed your portfolio in Stage 4, share it with the Generalist World community to get feedback and inspire others.
@@ -99,7 +105,7 @@ export default function ProfileGallery() {
           className="btn btn-primary"
           style={{ display: 'inline-flex', marginTop: '14px', textDecoration: 'none' }}
         >
-          Join the Community ↗
+          Join the Community <Icon name="open_in_new" size="15px" />
         </a>
       </div>
     </div>

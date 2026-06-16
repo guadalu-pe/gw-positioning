@@ -44,6 +44,14 @@
   --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
 }
 
+.material-icons {
+  font-size: 20px;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 body {
   font-family: var(--font-body);
   background: var(--gray-50);
@@ -188,11 +196,12 @@ h1, h2, h3 {
   border-radius: 0 2px 2px 0;
 }
 
-.nav-item-emoji {
-  font-size: 15px;
+.nav-item-icon {
   width: 20px;
   text-align: center;
   flex-shrink: 0;
+  font-size: 18px !important;
+  opacity: 0.85;
 }
 
 .nav-item-text { flex: 1; }
@@ -783,12 +792,14 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
 .gallery-search input { padding-left: 42px; }
 .gallery-search-icon {
   position: absolute;
-  left: 14px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--gray-400);
-  font-size: 16px;
+  font-size: 20px !important;
   pointer-events: none;
+  display: flex;
+  align-items: center;
 }
 
 .gallery-grid {
@@ -915,7 +926,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
 }
 
 .home-stage-card.completed { border-top-color: var(--green-600); }
-.home-card-emoji { font-size: 22px; }
+.home-card-icon { font-size: 22px !important; color: var(--gw-purple); }
 
 .home-card-title {
   font-family: var(--font-heading);

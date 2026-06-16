@@ -20,6 +20,30 @@ const reflections = [
   },
 ];
 
+const wantOptions = [
+  { value: 'More', symbol: '+' },
+  { value: 'Same', symbol: '=' },
+  { value: 'Less', symbol: '−' },
+];
+
+function WantPicker({ value, onChange }) {
+  return (
+    <div className="want-picker">
+      {wantOptions.map(opt => (
+        <button
+          key={opt.value}
+          className={`want-btn ${value === opt.value ? 'selected' : ''}`}
+          onClick={() => onChange(value === opt.value ? '' : opt.value)}
+          aria-label={opt.value}
+          title={opt.value}
+        >
+          {opt.symbol}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function SkillDots({ value, onChange }) {
   const filled = typeof value === 'number' ? value : 0;
   function handleClick(i) {
@@ -193,12 +217,10 @@ export default function Stage1({ data, onUpdate, onComplete, isCompleted }) {
                   <td style={{ fontWeight: 500 }}>{skill.name}</td>
                   <td style={{ color: 'var(--gray-500)', fontSize: '12px' }}>{skill.category}</td>
                   <td>
-                    <select value={sd.wantToDo || ''} onChange={e => updateSkill(skill.name, 'wantToDo', e.target.value)}>
-                      <option value="">—</option>
-                      <option>More</option>
-                      <option>Same</option>
-                      <option>Less</option>
-                    </select>
+                    <WantPicker
+                      value={sd.wantToDo || ''}
+                      onChange={val => updateSkill(skill.name, 'wantToDo', val)}
+                    />
                   </td>
                   <td>
                     <SkillDots

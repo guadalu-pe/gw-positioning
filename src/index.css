@@ -534,6 +534,42 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
   cursor: pointer;
 }
 
+.want-picker {
+  display: flex;
+  gap: 4px;
+}
+
+.want-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1.5px solid var(--gray-300);
+  background: transparent;
+  color: var(--gray-500);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+  line-height: 1;
+  padding: 0;
+  font-family: var(--font-body);
+}
+
+.want-btn:hover {
+  border-color: var(--gw-purple);
+  color: var(--gw-purple);
+  background: var(--gw-lavender-light);
+}
+
+.want-btn.selected {
+  background: var(--gw-purple);
+  border-color: var(--gw-purple);
+  color: white;
+}
+
 .skill-dots {
   display: flex;
   align-items: center;

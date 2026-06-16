@@ -11,7 +11,7 @@ const navItems = [
   { id: 'gallery',icon: 'grid_view',          title: 'Profile Gallery',          stage: null },
 ];
 
-export default function Sidebar({ current, onNavigate, completed }) {
+export default function Sidebar({ current, onNavigate, completed, user, onSignOut, onEmailSummary, emailSending }) {
   const stages = navItems.filter(n => n.stage);
   const done = stages.filter(s => completed.includes(s.id)).length;
   const pct = Math.round((done / stages.length) * 100);
@@ -51,6 +51,33 @@ export default function Sidebar({ current, onNavigate, completed }) {
           </button>
         ))}
       </nav>
+
+      <div className="sidebar-footer">
+        {user.photoURL && (
+          <img src={user.photoURL} alt="" className="sidebar-avatar" referrerPolicy="no-referrer" />
+        )}
+        <div className="sidebar-user-info">
+          <span className="sidebar-user-name">{user.displayName}</span>
+          <span className="sidebar-user-email">{user.email}</span>
+        </div>
+
+        <button
+          className="sidebar-icon-btn"
+          onClick={onEmailSummary}
+          disabled={emailSending}
+          title="Email my summary"
+        >
+          <Icon name={emailSending ? 'hourglass_empty' : 'email'} size="18px" />
+        </button>
+
+        <button
+          className="sidebar-icon-btn"
+          onClick={onSignOut}
+          title="Sign out"
+        >
+          <Icon name="logout" size="18px" />
+        </button>
+      </div>
     </aside>
   );
 }

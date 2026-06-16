@@ -1058,7 +1058,32 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
 }
 
 .home-stage-card.completed { border-top-color: var(--green-600); }
-.home-stage-card:last-child { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 16px; }
+.home-stage-card:last-child {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  background: var(--gw-yellow);
+  border-color: var(--gw-yellow);
+  border-top-color: var(--gw-purple);
+}
+
+.home-stage-card:last-child .home-card-icon,
+.home-stage-card:last-child .home-card-title,
+.home-stage-card:last-child .home-card-time {
+  color: var(--gw-black);
+}
+
+.home-stage-card:last-child span[style] {
+  color: var(--gw-purple-dark) !important;
+}
+
+.home-stage-card:last-child:hover {
+  background: #ffe800;
+  border-color: #ffe800;
+  border-top-color: var(--gw-purple);
+  transform: translateY(-2px);
+}
 .home-card-icon { font-size: 22px !important; color: var(--gw-purple); }
 
 .home-card-title {

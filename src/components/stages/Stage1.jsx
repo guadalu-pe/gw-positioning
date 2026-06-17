@@ -48,10 +48,14 @@ const typeStyleMap = {
   Potential: { className: 'potential', color: 'var(--gw-purple)' },
 };
 
+const allCategories = [...new Set(softSkills.map(s => s.category))].sort();
+
 export default function Stage1({ data, onUpdate, onComplete, isCompleted }) {
   const [step, setStep] = useState(0);
   const [reflectionAnswers, setReflectionAnswers] = useState(data.reflections || {});
   const [skillData, setSkillData] = useState(data.skills || {});
+  const [skillFilter, setSkillFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
 
   useEffect(() => {
     onUpdate({ reflections: reflectionAnswers, skills: skillData });
@@ -152,6 +156,25 @@ export default function Stage1({ data, onUpdate, onComplete, isCompleted }) {
             </div>
           </div>
 
+          <input
+            type="search"
+            className="skills-filter-input"
+            placeholder="Filter skills by name or category…"
+            value={skillFilter}
+            onChange={e => setSkillFilter(e.target.value)}
+          />
+          <div className="skills-filter-pills">
+            {allCategories.map(cat => (
+              <button
+                key={cat}
+                className={`skill-cat-pill${categoryFilter === cat ? ' active' : ''}`}
+                onClick={() => setCategoryFilter(categoryFilter === cat ? '' : cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
           <div style={{ overflowX: 'auto' }}>
             <table className="skills-table">
               <thead>
@@ -164,7 +187,10 @@ export default function Stage1({ data, onUpdate, onComplete, isCompleted }) {
                 </tr>
               </thead>
               <tbody>
-                {softSkills.map(skill => {
+                {softSkills.filter(skill =>
+                  (!skillFilter || skill.name.toLowerCase().includes(skillFilter.toLowerCase()) || skill.category.toLowerCase().includes(skillFilter.toLowerCase())) &&
+                  (!categoryFilter || skill.category === categoryFilter)
+                ).map(skill => {
                   const sd = skillData[skill.name] || {};
                   const type = computeSkillType(sd.wantToDo, sd.skillLevel);
                   const typeStyle = typeStyleMap[type];

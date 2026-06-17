@@ -1,9 +1,11 @@
 import Icon from '../Icon';
 import StepBreadcrumb, { StepNav } from '../StepBreadcrumb';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PositioningPDF from '../PositioningPDF';
 
 const STEPS = ['Your Summary'];
 
-export default function Stage5({ allData, onComplete, isCompleted, onNavigate }) {
+export default function Stage5({ allData, user, onComplete, isCompleted, onNavigate }) {
   const s1 = allData.stage1 || {};
   const s2 = allData.stage2 || {};
   const s3 = allData.stage3 || {};
@@ -116,7 +118,21 @@ export default function Stage5({ allData, onComplete, isCompleted, onNavigate })
       <div className="card" style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <span style={{ fontWeight: '700', fontSize: '15px' }}>Your Positioning Snapshot</span>
-          <span style={{ fontSize: '13px', color: 'var(--gray-500)' }}>{filledItems.length}/{summaryItems.length} filled</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '13px', color: 'var(--gray-500)' }}>{filledItems.length}/{summaryItems.length} filled</span>
+            <PDFDownloadLink
+              document={<PositioningPDF allData={allData} user={user} />}
+              fileName="gw-positioning-snapshot.pdf"
+              style={{ textDecoration: 'none' }}
+            >
+              {({ loading }) => (
+                <button className="btn btn-primary btn-sm">
+                  <Icon name={loading ? 'hourglass_empty' : 'download'} size="14px" />
+                  {loading ? 'Preparing PDF…' : 'Export PDF'}
+                </button>
+              )}
+            </PDFDownloadLink>
+          </div>
         </div>
         <div style={{ background: 'var(--gray-100)', borderRadius: '99px', height: '8px', overflow: 'hidden', marginBottom: '12px' }}>
           <div style={{ width: `${completionPct}%`, background: 'linear-gradient(to right, var(--purple-500), var(--purple-700))', height: '100%', borderRadius: '99px', transition: 'width 0.4s ease' }} />

@@ -1,12 +1,20 @@
+import { useState } from 'react';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 
 export default function Login() {
+  const [error, setError] = useState('');
+
   async function handleSignIn() {
+    setError('');
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (e) {
-      console.error(e);
+      if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+        setError('Sign-in was cancelled. Please try again.');
+      } else {
+        setError('Sign-in failed. Please try again.');
+      }
     }
   }
 
@@ -69,6 +77,12 @@ export default function Login() {
           </svg>
           Continue with Google
         </button>
+
+        {error && (
+          <p role="alert" style={{ color: '#dc2626', fontSize: '13px', marginTop: '12px', textAlign: 'center' }}>
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

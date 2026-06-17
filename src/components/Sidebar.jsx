@@ -1,5 +1,11 @@
 import Icon from './Icon';
 
+const syncLabels = {
+  saving: { icon: 'sync', text: 'Saving…' },
+  saved:  { icon: 'check', text: 'Saved' },
+  error:  { icon: 'warning', text: 'Save failed' },
+};
+
 const navItems = [
   { id: 'home',   icon: 'home',               title: 'Home',                     stage: null },
   { id: 'stage1', icon: 'bolt',               title: 'Strengths & Superpowers',  stage: 'Stage 1' },
@@ -11,7 +17,7 @@ const navItems = [
   { id: 'gallery',icon: 'grid_view',          title: 'Profile Gallery',          stage: null },
 ];
 
-export default function Sidebar({ current, onNavigate, completed, user, onSignOut, onEmailSummary, emailSending }) {
+export default function Sidebar({ current, onNavigate, completed, user, onSignOut, onEmailSummary, emailSending, syncStatus }) {
   const stages = navItems.filter(n => n.stage);
   const done = stages.filter(s => completed.includes(s.id)).length;
   const pct = Math.round((done / stages.length) * 100);
@@ -51,6 +57,13 @@ export default function Sidebar({ current, onNavigate, completed, user, onSignOu
           </button>
         ))}
       </nav>
+
+      {syncStatus && syncStatus !== 'idle' && (
+        <div className={`sync-chip sync-chip--${syncStatus}`} aria-live="polite">
+          <Icon name={syncLabels[syncStatus].icon} size="12px" />
+          {syncLabels[syncStatus].text}
+        </div>
+      )}
 
       <div className="sidebar-footer">
         {user.photoURL && (

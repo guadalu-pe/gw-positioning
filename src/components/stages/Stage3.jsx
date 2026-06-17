@@ -44,6 +44,7 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
   const [showCopyPrompt, setShowCopyPrompt] = useState(false);
 
   useEffect(() => {
+    // apiKey is intentionally excluded — never persisted to Firestore
     onUpdate({ framework, oneLiner, audience, outcome, approach, aiResult });
   }, [framework, oneLiner, audience, outcome, approach, aiResult]);
 
@@ -145,6 +146,10 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
               Template: "I help [target audience] achieve [specific outcomes] by [unique approach]."
             </div>
             <textarea rows={3} placeholder="I help ..." value={oneLiner} onChange={e => setOneLiner(e.target.value)} />
+            {(() => {
+              const wc = oneLiner.trim() ? oneLiner.trim().split(/\s+/).length : 0;
+              return <span className={`field-word-count${wc > 25 ? ' over' : ''}`}>{wc} / 25 words</span>;
+            })()}
           </div>
         </>
       )}
@@ -159,37 +164,66 @@ export default function Stage3({ data, onUpdate, onComplete, isCompleted }) {
               <div className="ai-box-subtitle">Uses your framework answers to craft a personalised tagline and bio</div>
             </div>
           </div>
-          <div className="callout info" style={{ marginBottom: '16px' }}>
-            <Icon name="info" className="callout-icon" />
-            <div className="callout-content">
-              <p>Option A: Enter your Anthropic API key below for instant generation. Your key is only used in your browser and never stored on any server.</p>
-              <p style={{ marginTop: '4px' }}>Option B: Copy the prompt and paste it into <a href="https://claude.ai" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--purple-600)' }}>claude.ai</a> or any AI tool.</p>
+
+          {/* Primary path: Open Claude.ai */}
+          <div style={{ marginBottom: '20px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--gray-600)', marginBottom: '12px' }}>
+              <strong>Recommended:</strong> Click below to open Claude.ai — your prompt will be copied to your clipboard automatically. Just paste it in.
+            </p>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  navigator.clipboard.writeText(buildPrompt(framework, oneLiner));
+                  window.open('https://claude.ai/new', '_blank', 'noopener,noreferrer');
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 3000);
+                }}
+              >
+                <Icon name="open_in_new" size="16px" /> Open Claude.ai with my prompt
+              </button>
+              {copied && <span style={{ fontSize: '13px', color: 'var(--green-600)', fontWeight: 600 }}>Prompt copied! Paste it into Claude.</span>}
             </div>
-          </div>
-          <div style={{ marginBottom: '16px' }}>
-            <label className="field-label">Anthropic API Key (optional)</label>
-            <div className="ai-key-row">
-              <input type={showKey ? 'text' : 'password'} placeholder="sk-ant-..." value={apiKey} onChange={e => setApiKey(e.target.value)} />
-              <button className="btn btn-secondary btn-sm" onClick={() => setShowKey(v => !v)}>{showKey ? 'Hide' : 'Show'}</button>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <button className="btn btn-primary" onClick={handleGenerate} disabled={!apiKey || loading}>
-              <Icon name={loading ? 'hourglass_empty' : 'auto_awesome'} size="16px" />{loading ? 'Generating...' : 'Generate with AI'}
+            <button
+              className="btn btn-ghost btn-sm"
+              style={{ marginTop: '10px' }}
+              onClick={() => setShowCopyPrompt(v => !v)}
+            >
+              <Icon name="visibility" size="14px" /> {showCopyPrompt ? 'Hide' : 'Preview'} prompt
             </button>
-            <button className="btn btn-secondary" onClick={() => setShowCopyPrompt(v => !v)}>
-              <Icon name="content_copy" size="16px" />{showCopyPrompt ? 'Hide Prompt' : 'View / Copy Prompt'}
-            </button>
-            {showCopyPrompt && (
-              <button className="btn btn-secondary btn-sm" onClick={copyPrompt}>{copied ? 'Copied!' : 'Copy to Clipboard'}</button>
-            )}
+            {showCopyPrompt && <div className="ai-copy-prompt-box" style={{ marginTop: '10px' }}>{buildPrompt(framework, oneLiner)}</div>}
           </div>
-          {showCopyPrompt && <div className="ai-copy-prompt-box" style={{ marginTop: '12px' }}>{buildPrompt(framework, oneLiner)}</div>}
-          {error && (
-            <div style={{ marginTop: '12px', padding: '10px 14px', background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px', color: '#7f1d1d', fontSize: '13px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-              <Icon name="warning" size="16px" style={{ flexShrink: 0, marginTop: '1px' }} />{error}
+
+          {/* Secondary path: API key */}
+          <details style={{ borderTop: '1px solid var(--gray-200)', paddingTop: '16px' }}>
+            <summary style={{ cursor: 'pointer', fontSize: '13px', fontWeight: 600, color: 'var(--gray-600)', userSelect: 'none', listStyle: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Icon name="expand_more" size="16px" /> Advanced: Use Anthropic API key directly
+            </summary>
+            <div style={{ marginTop: '14px' }}>
+              <div className="callout warning" style={{ marginBottom: '14px' }}>
+                <Icon name="warning" className="callout-icon" />
+                <div className="callout-content">
+                  <p>Your API key is only used in this browser session and is <strong>never saved or sent to our servers</strong>. However, pasting any API key into a website carries inherent risk — use a key with minimal permissions if possible.</p>
+                </div>
+              </div>
+              <div style={{ marginBottom: '16px' }}>
+                <label className="field-label">Anthropic API Key</label>
+                <div className="ai-key-row">
+                  <input type={showKey ? 'text' : 'password'} placeholder="sk-ant-..." value={apiKey} onChange={e => setApiKey(e.target.value)} />
+                  <button className="btn btn-secondary btn-sm" onClick={() => setShowKey(v => !v)}>{showKey ? 'Hide' : 'Show'}</button>
+                </div>
+              </div>
+              <button className="btn btn-secondary" onClick={handleGenerate} disabled={!apiKey || loading}>
+                <Icon name={loading ? 'hourglass_empty' : 'auto_awesome'} size="16px" />{loading ? 'Generating...' : 'Generate with AI'}
+              </button>
+              {error && (
+                <div style={{ marginTop: '12px', padding: '10px 14px', background: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px', color: '#7f1d1d', fontSize: '13px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                  <Icon name="warning" size="16px" style={{ flexShrink: 0, marginTop: '1px' }} />{error}
+                </div>
+              )}
             </div>
-          )}
+          </details>
+
           {aiResult && (
             <div className="ai-result">
               <div className="ai-result-label">AI-Generated Tagline &amp; Bio</div>

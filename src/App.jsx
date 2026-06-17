@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
@@ -12,6 +12,7 @@ import Stage4 from './components/stages/Stage4';
 import Stage5 from './components/stages/Stage5';
 import Stage6 from './components/stages/Stage6';
 import ProfileGallery from './components/ProfileGallery';
+import Celebration from './components/Celebration';
 import Icon from './components/Icon';
 
 export default function App() {
@@ -19,7 +20,11 @@ export default function App() {
   const [current, setCurrent] = useState('home');
   const [userData, setUserData] = useState({});
   const [toast, setToast] = useState('');
+  const [toastType, setToastType] = useState('success');
+  const [syncStatus, setSyncStatus] = useState('idle'); // 'idle' | 'saving' | 'saved' | 'error'
   const [emailSending, setEmailSending] = useState(false);
+  const debounceTimer = useRef(null);
+  const syncResetTimer = useRef(null);
 
   // Auth listener
   useEffect(() => {
@@ -36,13 +41,25 @@ export default function App() {
     return unsub;
   }, [user]);
 
-  // Save to Firestore on change (debounced via useEffect)
+  // Save to Firestore with 300ms debounce; optimistic local update is immediate
   function updateStageData(stage, data) {
     const next = { ...userData, [stage]: { ...(userData[stage] || {}), ...data } };
     setUserData(next);
-    if (user) {
-      setDoc(doc(db, 'users', user.uid), next, { merge: true });
-    }
+    if (!user) return;
+
+    clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(async () => {
+      setSyncStatus('saving');
+      try {
+        await setDoc(doc(db, 'users', user.uid), next, { merge: true });
+        setSyncStatus('saved');
+        clearTimeout(syncResetTimer.current);
+        syncResetTimer.current = setTimeout(() => setSyncStatus('idle'), 2000);
+      } catch {
+        setSyncStatus('error');
+        showToast('Failed to save. Check your connection.', 'error');
+      }
+    }, 300);
   }
 
   const completed = userData.completed || [];
@@ -62,48 +79,23 @@ export default function App() {
       setCurrent(nextStage);
       showToast('Stage complete! On to the next one.');
     } else {
-      setCurrent('stage5');
-      showToast('All stages complete!');
+      setCurrent('celebration');
     }
   }
 
-  function showToast(msg) {
+  function showToast(msg, type = 'success') {
     setToast(msg);
+    setToastType(type);
     setTimeout(() => setToast(''), 2500);
   }
 
-  async function handleEmailSummary() {
+  function handleEmailSummary() {
     setEmailSending(true);
-    try {
-      const summary = buildSummary(userData, user);
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': '', // placeholder — see note below
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 1200,
-          messages: [{ role: 'user', content: `Format the following positioning summary as a clean, readable plain-text email to send to ${user.email}. Start with a warm greeting, then present each section clearly:\n\n${summary}` }],
-        }),
-      });
-      // Email via mailto fallback since we don't have a backend mailer
-      const subject = encodeURIComponent('Your Generalist World Positioning Summary');
-      const body = encodeURIComponent(summary);
-      window.open(`mailto:${user.email}?subject=${subject}&body=${body}`);
-      showToast('Email draft opened!');
-    } catch {
-      // fallback: open mailto directly
-      const subject = encodeURIComponent('Your Generalist World Positioning Summary');
-      const body = encodeURIComponent(buildSummary(userData, user));
-      window.open(`mailto:${user.email}?subject=${subject}&body=${body}`);
-      showToast('Email draft opened!');
-    } finally {
-      setEmailSending(false);
-    }
+    const subject = encodeURIComponent('Your Generalist World Positioning Summary');
+    const body = encodeURIComponent(buildSummary(userData, user));
+    window.open(`mailto:${user.email}?subject=${subject}&body=${body}`);
+    showToast('Email draft opened!');
+    setEmailSending(false);
   }
 
   // Loading state
@@ -127,6 +119,7 @@ export default function App() {
         onSignOut={() => signOut(auth)}
         onEmailSummary={handleEmailSummary}
         emailSending={emailSending}
+        syncStatus={syncStatus}
       />
 
       <main className="main-content">
@@ -135,12 +128,19 @@ export default function App() {
         {current === 'stage2' && <Stage2 data={userData.stage2 || {}} onUpdate={d => updateStageData('stage2', d)} onComplete={() => markComplete('stage2')} isCompleted={completed.includes('stage2')} />}
         {current === 'stage3' && <Stage3 data={userData.stage3 || {}} onUpdate={d => updateStageData('stage3', d)} onComplete={() => markComplete('stage3')} isCompleted={completed.includes('stage3')} />}
         {current === 'stage4' && <Stage4 data={userData.stage4 || {}} onUpdate={d => updateStageData('stage4', d)} onComplete={() => markComplete('stage4')} isCompleted={completed.includes('stage4')} />}
-        {current === 'stage5' && <Stage5 allData={userData} onNavigate={setCurrent} onComplete={() => markComplete('stage5')} isCompleted={completed.includes('stage5')} />}
+        {current === 'stage5' && <Stage5 allData={userData} user={user} onNavigate={setCurrent} onComplete={() => markComplete('stage5')} isCompleted={completed.includes('stage5')} />}
         {current === 'stage6' && <Stage6 data={userData.stage6 || {}} onUpdate={d => updateStageData('stage6', d)} onComplete={() => markComplete('stage6')} isCompleted={completed.includes('stage6')} />}
         {current === 'gallery' && <ProfileGallery />}
+        {current === 'celebration' && <Celebration allData={userData} user={user} onNavigate={setCurrent} />}
       </main>
 
-      {toast && <div className="toast"><Icon name="check_circle" size="16px" /> {toast}</div>}
+      <div aria-live="polite" aria-atomic="true" className="toast-live-region">
+        {toast && (
+          <div className={`toast${toastType === 'error' ? ' toast-error' : ''}`}>
+            <Icon name={toastType === 'error' ? 'warning' : 'check_circle'} size="16px" /> {toast}
+          </div>
+        )}
+      </div>
     </>
   );
 }

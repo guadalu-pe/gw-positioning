@@ -28,12 +28,16 @@ export default function App() {
 
   // Auth listener
   useEffect(() => {
-    return onAuthStateChanged(auth, u => setUser(u ?? null));
+    return onAuthStateChanged(auth, u => {
+      setUser(u ?? null);
+      if (!u) setUserData({}); // clear data immediately on sign-out
+    });
   }, []);
 
   // Firestore sync — listen to user's doc
   useEffect(() => {
     if (!user) return;
+    setUserData({}); // reset before loading the new user's data
     const ref = doc(db, 'users', user.uid);
     const unsub = onSnapshot(ref, snap => {
       if (snap.exists()) setUserData(snap.data());
